@@ -77,13 +77,13 @@
   <div class="mb-3">
     <label class="form-label">Water %:</label>
     <div class="d-flex flex-nowrap gap-1 overflow-auto mb-2" style="scrollbar-width: none;">
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(60)">60%</button>
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(65)">65%</button>
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(68)">68%</button>
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(70)">70%</button>
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(72)">72%</button>
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(75)">75%</button>
-      <button class="btn btn-outline-primary btn-sm flex-shrink-0" onclick="setWater(80)">80%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(60)">60%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(65)">65%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(68)">68%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(70)">70%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(72)">72%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(75)">75%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setWater(80)">80%</button>
     </div>
     <div class="input-group">
       <button class="btn btn-outline-secondary" onclick="adjust('waterPct', -1)">−</button>
@@ -95,16 +95,34 @@
   <!-- Salt Percentage -->
   <div class="mb-3">
     <label class="form-label">Salt %:</label>
-    <div class="btn-group-fullwidth mb-2">
-      <button class="btn btn-outline-success btn-sm" onclick="setSalt(1.5)">1.5%</button>
-      <button class="btn btn-outline-success btn-sm" onclick="setSalt(2.0)">2.0%</button>
-      <button class="btn btn-outline-success btn-sm" onclick="setSalt(2.5)">2.5%</button>
-      <button class="btn btn-outline-success btn-sm" onclick="setSalt(3.0)">3.0%</button>
+    <div class="d-flex flex-nowrap gap-1 overflow-auto mb-2" style="scrollbar-width: none;">
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setSalt(1.5)">1.5%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setSalt(2.0)">2.0%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setSalt(2.5)">2.5%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setSalt(3.0)">3.0%</button>
     </div>
     <div class="input-group">
       <button class="btn btn-outline-secondary" onclick="adjust('saltPct', -0.25)">−</button>
       <input type="number" step="0.25" class="form-control text-center" id="saltPct" value="2.0" onclick="focusInput('saltPct')">
       <button class="btn btn-outline-secondary" onclick="adjust('saltPct', 0.25)">+</button>
+    </div>
+  </div>
+
+  <!-- Oil Percentage -->
+  <div class="mb-3">
+    <label class="form-label">Oil %:</label>
+    <div class="d-flex flex-nowrap gap-1 overflow-auto mb-2" style="scrollbar-width: none;">
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setOil(0.0)">0%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setOil(1.0)">1%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setOil(2.0)">2%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setOil(3.0)">3%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setOil(4.0)">4%</button>
+      <button class="btn btn-outline-success btn-sm flex-fill" onclick="setOil(5.0)">5%</button>
+    </div>
+    <div class="input-group">
+      <button class="btn btn-outline-secondary" onclick="adjust('oilPct', -0.5)">−</button>
+      <input type="number" step="0.5" class="form-control text-center" id="oilPct" value="0" onclick="focusInput('oilPct')">
+      <button class="btn btn-outline-secondary" onclick="adjust('oilPct', 0.5)">+</button>
     </div>
   </div>
 
@@ -160,6 +178,9 @@ function setWater(pct) {
 function setSalt(pct) {
   document.getElementById('saltPct').value = pct;
 }
+function setOil(pct) {
+  document.getElementById('oilPct').value = pct;
+}
 
 function handlePrefermentChange() {
   const type = document.getElementById('prefermentType').value;
@@ -189,6 +210,7 @@ function calculate() {
   const mode = document.getElementById('mode').value;
   const waterPct = parseFloat(document.getElementById('waterPct').value);
   const saltPct = parseFloat(document.getElementById('saltPct').value);
+  const oilPct = parseFloat(document.getElementById('oilPct').value);
   const prefermentType = document.getElementById('prefermentType').value;
   const prefermentGrams = parseFloat(document.getElementById('prefermentGrams').value) || 0;
 
@@ -196,12 +218,12 @@ function calculate() {
 
   if (mode === 'flour') {
     totalFlour = parseFloat(document.getElementById('flourGrams').value);
-    totalDough = totalFlour + totalFlour * waterPct / 100 + totalFlour * saltPct / 100;
+    totalDough = totalFlour + totalFlour * waterPct / 100 + totalFlour * saltPct / 100 + totalFlour * oilPct / 100;
   } else {
     const numBalls = parseInt(document.getElementById('numBalls').value);
     const ballWeight = parseFloat(document.getElementById('ballWeight').value);
     totalDough = numBalls * ballWeight;
-    const factor = 1 + waterPct / 100 + saltPct / 100;
+    const factor = 1 + waterPct / 100 + saltPct / 100 + oilPct / 100;
     totalFlour = totalDough / factor;
   }
 
@@ -218,11 +240,13 @@ function calculate() {
   const totalWater = totalFlour * waterPct / 100;
   const addedWater = totalWater - prefermentWater;
   const totalSalt = totalFlour * saltPct / 100;
+  const totalOil = totalFlour * oilPct / 100;
 
   let output = `<strong>Total dough:</strong> ${totalDough.toFixed(1)}g<br>`;
   output += `<strong>Total flour:</strong> ${totalFlour.toFixed(1)}g (${prefermentFlour.toFixed(1)}g + ${addedFlour.toFixed(1)}g)<br>`;
   output += `<strong>${waterPct}% Water:</strong> ${totalWater.toFixed(1)}g (${prefermentWater.toFixed(1)}g + ${addedWater.toFixed(1)}g)<br>`;
-  output += `<strong>${saltPct}% Salt:</strong> ${totalSalt.toFixed(1)}g`;
+  output += `<strong>${saltPct}% Salt:</strong> ${totalSalt.toFixed(1)}g<br>`;
+  output += `<strong>${oilPct}% Oil:</strong> ${totalOil.toFixed(1)}g`;
 
   document.getElementById('modalOutput').innerHTML = output;
   const modal = new bootstrap.Modal(document.getElementById('resultModal'));
